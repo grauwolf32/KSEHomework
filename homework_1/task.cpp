@@ -1,24 +1,48 @@
+class Date
+{
+	public:
+
+	Date();
+	Date(size_t year,size_t month,size_t day);
+
+	size_t year;
+	size_t month;
+	size_t day;
+};
+
 class User{
-public:
-	size_t getUserId();
-private:
-	size_t id;
-	string name;
-	std::vector<Book> borrowed_books; 
+	public:
+		size_t getUserId();
+	private:
+		size_t id;
+		string name;
+		std::vector<Book> borrowed_books; 
 };
 
 
 class Book{
 public:
-	size_t getBookId();
-	
+	Book();
+	Book(string name);
+	~Book()
+
+	size_t getBookId() const;
+	User*  getBookOwner() const;
+
+	void setBorrowingDate(Date& date);
+	Date& getBorrowingDate() const;
+
 private:
-	string name;
 	size_t id;
+	string name;
 	User* owner;
+	Date  borrowing_date;
+
+	
 };
 
 const MaxUserBooks = 3;
+const MaxDaysToExpire = 30;
 
 class LibraryModel{
 public:
