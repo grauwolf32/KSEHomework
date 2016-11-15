@@ -38,7 +38,7 @@ private:
 	User* owner;
 	Date  borrowing_date;
 
-	
+
 };
 
 const MaxUserBooks = 3;
@@ -58,11 +58,12 @@ public:
 	void LentABookToUser(Book& book,User& user);
 	void TakeABookFromUser(Book& book,User& user);
 
-	std::vector<User>& getUsersWithExpiredBooks() const;
+	std::vector<User> getUsersWithExpiredBooks() const;
 
 private:
 	std::vector<User> library_users;
 	std::vector<Book> library_books;
+	Date current_date;
 	
 };
 
@@ -236,7 +237,7 @@ void TakeABookFromUser(Book& book,User& user)
 {
 	if(book.owner->id != user.id)
 	{
-		//std::cout << "This book owes to another user" << std::endl; //TODO Send Message to View
+		//std::cout << "This book owes to another user" << std::endl; //#TODO Send Message to View
 		return;
 	}
 
@@ -250,10 +251,29 @@ void TakeABookFromUser(Book& book,User& user)
 	book.owner = (User*) NULL;
 }
 
-std::vector<User>& LibraryModel::getUsersWithExpiredBooks() const
+std::vector<User> LibraryModel::getUsersWithExpiredBooks() const
 {
-	std::vector<User> users;
-	
+	size_t current_days = 0;
+	size_t lasted_days = 0;
+
+	current_days = current_date.year*365 + current_date.month*30 + current_date.day;
+
+	std::vector<User> expired_users;
+	for(auto iter = library_users.begin();iter != library_users.end();iter++)
+	{
+		for(size_t i = 0;i < iter->borrowed_books.size();i++)
+		{
+			lasted_days = iter->borrowed_books[i].year*356;
+			lasted_days += iter->borrowed_books[i].month*30;
+			lasted_days += iter->borrowed_books[i].day;
+
+			if(lasted_days > MaxDaysToExpire){
+				expired_users.push_back(*iter);
+				break;
+			}
+		}
+	}
+	return expired_users;
 }
 
 
