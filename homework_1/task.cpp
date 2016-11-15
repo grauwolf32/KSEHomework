@@ -1,6 +1,24 @@
+#include <vector>
+#include <string>
+#include <iostream>
+
+class Date;
+class Book;
+class User;
+class Message;
+
+class LibraryModel;
+class LibraryView;
+class LibraryController;
+
+const MaxUserBooks = 3;
+const MaxDaysToExpire = 30;
+
+enum NotificationType{Default,Error,Notification};
+
 class Date
 {
-	public:
+public:
 
 	Date();
 	Date(size_t year,size_t month,size_t day);
@@ -11,12 +29,13 @@ class Date
 };
 
 class User{
-	public:
-		size_t getUserId();
-	private:
-		size_t id;
-		string name;
-		std::vector<Book> borrowed_books; 
+public:
+	size_t getUserId();
+
+private:
+	size_t id;
+	string name;
+	std::vector<Book> borrowed_books; 
 };
 
 
@@ -41,8 +60,12 @@ private:
 
 };
 
-const MaxUserBooks = 3;
-const MaxDaysToExpire = 30;
+class Message{
+public:
+	Message(NotificationType ntype_,char* text_);
+	string text;
+	NotificationType notification_type;
+};
 
 class LibraryModel{
 public:
@@ -64,7 +87,7 @@ private:
 	std::vector<User> library_users;
 	std::vector<Book> library_books;
 	Date current_date;
-	
+	LibraryView* view;
 };
 
 
@@ -73,6 +96,7 @@ public:
 	void ShowAllUsers() const;
 	void ShowAllBooks() const;
 	void ShowUsersWithExpiredBooks() const;
+	void Notify(Message& msg) const;
 private:
 	LibraryController* controller;
 };
@@ -136,6 +160,11 @@ void LibraryView::ShowUsersWithExpiredBooks() const{
 	}
 }
 
+void LibraryView::Notify(Message& msg) const
+{
+	std::cout << msg.text << std::endl;
+}
+
 std::vector<User>& LibraryModel::getUsers() const { return library_users; }
 std::vector<Book>& LibraryModel::getBooks() const { return library_books; }
 
@@ -143,16 +172,9 @@ void LibraryModel::addUser(User& user)
 {
 	for(auto iter=library_users.begin();iter != library_users.end(); iter++)
 	{
-		if(iter->id == user.id)
-		{
-			if(iter->name == user.name){
-				//std::cout << "User already exists!" << std::endl; //TODO Send Message to View
-				return;
-			}
-			else{
-				//std::cout << "User already exists with name: " << iter->name << std::endl; //TODO Send Message to View
-				return;
-			}			
+		if(iter->id == user.id){
+			view->Notify(Message(Error,"User already exists!")); 
+			return;			
 		}
 	}
 	library_users.push_back(user);
@@ -169,7 +191,7 @@ void LibraryModel::delUser(User& user)
 		}
 	}
 
-	//std::cout << "User does not exists!" << std::endl; //TODO Send Message to View
+	view->Notify(Message(Error,"User does not exists!"));
 }
 
 void LibraryModel::addBook(Book& book)
@@ -178,14 +200,8 @@ void LibraryModel::addBook(Book& book)
 	{
 		if(iter->id == book.id)
 		{
-			if(iter->name == book.name){
-				//std::cout << "Book already exists!" << std::endl; //TODO Send Message to View
-				return;
-			}
-			else{
-				//std::cout << "Book already exists with name: " << iter->name << std::endl; //TODO Send Message to View
-				return;
-			}			
+			view->Notify(Message(Error,"Book already exists!"));
+			return;
 		}
 	}
 	library_books.push_back(book);
@@ -202,19 +218,19 @@ void LibraryModel::delBook(Book& book)
 		}
 	}
 
-	//std::cout << "Book does not exists!" << std::endl; //TODO Send Message to View
+	view->Notify(Message(Error,"Book does not exists!"));
 }
 
 void LibraryModel::LentABookToUser(Book& book,User& user)
 {
 	if(book.owner != (User*)NULL){
-		//std::cout << "This book is aleady owed by someone!" << std::endl; //TODO Send Message to View
+		view->Notify(Message(Notification,"This book is aleady owed by someone!"));
 		return;
 	}
 
 	if(user.borrowed_books.size() > MaxUserBooks)
 	{
-		//std::cout << "User owes too much books!" << std::endl; //TODO Send Message to View
+		view->Notify(Message(Notification,"User owes too much books!"));
 		return;
 	}
 
@@ -222,7 +238,7 @@ void LibraryModel::LentABookToUser(Book& book,User& user)
 	{
 		if(iter->id == book.id)
 		{
-			//std::cout << "User user already owes this book" << std::endl; //TODO Send Message to View
+			view->Notify(Message(Error,"User user already owes this book!"));
 			return;
 		}
 	}
@@ -237,7 +253,7 @@ void TakeABookFromUser(Book& book,User& user)
 {
 	if(book.owner->id != user.id)
 	{
-		//std::cout << "This book owes to another user" << std::endl; //#TODO Send Message to View
+		view->Notify(Message(Error,"This book owes to another user!"));
 		return;
 	}
 
