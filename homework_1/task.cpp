@@ -48,8 +48,10 @@ public:
 	Book(string name);
 
 	size_t getBookId() const;
-	User*  getBookOwner() const;
 	string getBookName() const;
+
+	User*  getBookOwner() const;
+	void   setBookOwner(User* user);
 
 	void setBorrowingDate(Date& date);
 	Date getBorrowingDate() const;
@@ -66,7 +68,7 @@ private:
 class Message{
 public:
 	Message();
-	Message(NotificationType ntype_,char* text_);
+	Message(NotificationType ntype_,string text_);
 	string text;
 	NotificationType notification_type;
 };
@@ -124,21 +126,27 @@ Date::Date():year(0),month(0),day(0){}
 Date::Date(size_t year_, size_t month_, size_t day_):year(year_),month(month_),day(day_){} //#TODO Assert month <= 12 day <= 31
 
 Message::Message():notification_type(Default),text(string("")) {}
-Message(NotificationType ntype_,char* text_):notification_type(ntype_),text(string(text_)) {}
+Message(NotificationType ntype_,string text_):notification_type(ntype_),text(text_) {}
 
 User::User(string name){} //
-size_t User::getUserId() const { return name; }
-string User::getUserName() const { return id; }
+
+size_t User::getUserId() const { return id; }
+string User::getUserName() const { return name; }
 
 size_t Book::getBookId() const { return id; }
 User*  Book::getBookOwner() const { return owner; }
-string getBookName() const { return name; }
+string Book::getBookName() const { return name; }
+
+void   Book::setBookOwner(User* user)
+{
+	owner = user;
+}
 
 void Book::setBorrowingDate(Date& date)
 {
 	borrowing_date.year = date.year;
 	borrowing_date.month = date.month;
-	borrowing_date.day = data.day;
+	borrowing_date.day = date.day;
 }
 
 Date Book::getBorrowingDate() const { return borrowing_date; }
@@ -213,7 +221,7 @@ void LibraryModel::delUser(User& user)
 	{
 		if(iter->getUserId() == user.getUserId())
 		{
-			library_users.erase(*iter);
+			library_users.erase(iter);
 			return;
 		}
 	}
@@ -240,7 +248,7 @@ void LibraryModel::delBook(Book& book)
 	{
 		if(iter->getBookId() == book.getBookId())
 		{
-			library_books.erase(*iter);
+			library_books.erase(iter);
 			return;
 		}
 	}
@@ -250,7 +258,7 @@ void LibraryModel::delBook(Book& book)
 
 void LibraryModel::LentABookToUser(Book& book,User& user)
 {
-	if(book.owner != (User*)NULL){
+	if(book.getBookOwner() != (User*)NULL){
 		view->Notify(Message(Notification,"This book is aleady owed by someone!"));
 		return;
 	}
@@ -271,14 +279,14 @@ void LibraryModel::LentABookToUser(Book& book,User& user)
 	}
 
 	user.borrowed_books.push_back(book);
-	book.owner = &user;
+	book.setBookOwner(&user); // Dangerous !!!
 	
 }
 
 
 void TakeABookFromUser(Book& book,User& user)
 {
-	if(book.owner->id != user.getUserId())
+	if(book.getBookOwner()->id != user.getUserId())
 	{
 		view->Notify(Message(Error,"This book owes to another user!"));
 		return;
@@ -287,11 +295,11 @@ void TakeABookFromUser(Book& book,User& user)
 	for(auto iter = user.borrowed_books.begin();iter != user.borrowed_books.end();iter++)
 	{
 		if(iter->getBookId() == book.getBookId()){
-			user.borrowed_books.erase(*iter);
+			user.borrowed_books.erase(iter);
 			break;
 		}
 	}
-	book.owner = (User*) NULL;
+	book.setBookOwner((User*) NULL);
 }
 
 std::vector<User> LibraryModel::getUsersWithExpiredBooks() const
