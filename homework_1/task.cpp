@@ -30,7 +30,8 @@ public:
 
 class User{
 public:
-	size_t getUserId();
+	size_t getUserId() const;
+	string getUserName() const;
 
 private:
 	size_t id;
@@ -47,6 +48,7 @@ public:
 
 	size_t getBookId() const;
 	User*  getBookOwner() const;
+	string getBookName() const;
 
 	void setBorrowingDate(Date& date);
 	Date& getBorrowingDate() const;
@@ -69,8 +71,8 @@ public:
 
 class LibraryModel{
 public:
-	std::vector<User>& getUsers() const;
-	std::vector<Book>& getBooks() const;
+	std::vector<User> getUsers() const;
+	std::vector<Book> getBooks() const;
 
 	void addUser(User& user);
 	void delUser(User& user);
@@ -107,10 +109,10 @@ public:
 	void LentABookToUser(Book& book,User& user) { return model->LentABookToUser(book,user); }
 	void TakeABookFromUser(Book& book,User& user) { return model->TakeABookFromUser(book,user); }
 
-	std::vector<User>& getUsers() const { return model->getUsers(); }
-	std::vector<Book>& getBooks() const { return model->getBooks(); }
+	std::vector<User> getUsers() const { return model->getUsers(); }
+	std::vector<Book> getBooks() const { return model->getBooks(); }
 
-	std::vector<User>& getUsersWithExpiredBooks() const { return model->getUsersWithExpiredBooks();}
+	std::vector<User> getUsersWithExpiredBooks() const { return model->getUsersWithExpiredBooks();}
 
 private:
 	LibraryModel* model;
@@ -122,7 +124,7 @@ void LibraryView::ShowAllUsers() const {
 		std::cout << "Users:" << std::endl;
 		for(auto iter = users.begin(); iter != users.end(); iter++)
 		{
-			std::cout << iter->name << " with id: " << iter->id << std::endl;
+			std::cout << iter->getUserName() << " with id: " << iter->getUserId() << std::endl;
 		}
 	}
 	else {
@@ -137,7 +139,7 @@ void LibraryView::ShowAllBooks() const {
 		std::cout << "Books:" << std::endl;
 		for(auto iter = books.begin(); iter != books.end(); iter++)
 		{
-			std::cout << iter->name << " with id: " << iter->id << std::endl;
+			std::cout << iter->getBookName() << " with id: " << iter->getBookId() << std::endl;
 		}
 	}
 	else {
@@ -152,7 +154,7 @@ void LibraryView::ShowUsersWithExpiredBooks() const{
 		std::cout << "Users who expired his/her book(s): " << std::endl;
 		for(auto iter = users.begin();iter != users.end(); iter++)
 		{
-			std::cout << iter->name << " with id: " << iter->id << std::endl;
+			std::cout << iter->getUserName() << " with id: " << iter->getUserId() << std::endl;
 		}
 	}
 	else{
@@ -165,14 +167,14 @@ void LibraryView::Notify(Message& msg) const
 	std::cout << msg.text << std::endl;
 }
 
-std::vector<User>& LibraryModel::getUsers() const { return library_users; }
-std::vector<Book>& LibraryModel::getBooks() const { return library_books; }
+std::vector<User> LibraryModel::getUsers() const { return library_users; }
+std::vector<Book> LibraryModel::getBooks() const { return library_books; }
 
 void LibraryModel::addUser(User& user)
 {
 	for(auto iter=library_users.begin();iter != library_users.end(); iter++)
 	{
-		if(iter->id == user.id){
+		if(iter->getUserId() == user.getUserId()){
 			view->Notify(Message(Error,"User already exists!")); 
 			return;			
 		}
@@ -184,7 +186,7 @@ void LibraryModel::delUser(User& user)
 {
 	for(auto iter=library_users.begin();iter != library_users.end();iter++)
 	{
-		if(iter->id == user.id)
+		if(iter->getUserId() == user.getUserId())
 		{
 			library_users.erase(*iter);
 			return;
@@ -198,7 +200,7 @@ void LibraryModel::addBook(Book& book)
 {
 	for(auto iter=library_books.begin();iter != library_books.end(); iter++)
 	{
-		if(iter->id == book.id)
+		if(iter->getBookId() == book.getBookId())
 		{
 			view->Notify(Message(Error,"Book already exists!"));
 			return;
@@ -211,7 +213,7 @@ void LibraryModel::delBook(Book& book)
 {
 	for(auto iter=library_books.begin();iter != library_books.end();iter++)
 	{
-		if(iter->id == book.id)
+		if(iter->getBookId() == book.getBookId())
 		{
 			library_books.erase(*iter);
 			return;
@@ -236,7 +238,7 @@ void LibraryModel::LentABookToUser(Book& book,User& user)
 
 	for(auto iter = user.borrowed_books.begin();iter != user.borrowed_books.end();iter++)
 	{
-		if(iter->id == book.id)
+		if(iter->getBookId() == book.getBookId())
 		{
 			view->Notify(Message(Error,"User user already owes this book!"));
 			return;
@@ -251,7 +253,7 @@ void LibraryModel::LentABookToUser(Book& book,User& user)
 
 void TakeABookFromUser(Book& book,User& user)
 {
-	if(book.owner->id != user.id)
+	if(book.owner->id != user.getUserId())
 	{
 		view->Notify(Message(Error,"This book owes to another user!"));
 		return;
@@ -259,7 +261,7 @@ void TakeABookFromUser(Book& book,User& user)
 
 	for(auto iter = user.borrowed_books.begin();iter != user.borrowed_books.end();iter++)
 	{
-		if(iter->id == book.id){
+		if(iter->getBookId() == book.getBookId()){
 			user.borrowed_books.erase(*iter);
 			break;
 		}
