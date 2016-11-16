@@ -36,10 +36,11 @@ public:
 	size_t getUserId() const;
 	string getUserName() const;
 
+	std::vector<Book> borrowed_books; 
+
 private:
 	size_t id;
 	string name;
-	std::vector<Book> borrowed_books; 
 };
 
 
@@ -102,7 +103,7 @@ public:
 	void ShowAllUsers() const;
 	void ShowAllBooks() const;
 	void ShowUsersWithExpiredBooks() const;
-	void Notify(Message& msg) const;
+	void Notify(Message msg) const;
 private:
 	LibraryController* controller;
 };
@@ -126,9 +127,9 @@ Date::Date():year(0),month(0),day(0){}
 Date::Date(size_t year_, size_t month_, size_t day_):year(year_),month(month_),day(day_){} //#TODO Assert month <= 12 day <= 31
 
 Message::Message():notification_type(Default),text(string("")) {}
-Message(NotificationType ntype_,string text_):notification_type(ntype_),text(text_) {}
+Message::Message(NotificationType ntype_,string text_):notification_type(ntype_),text(text_) {}
 
-User::User(string name){} //
+User::User(string name){} 
 
 size_t User::getUserId() const { return id; }
 string User::getUserName() const { return name; }
@@ -195,7 +196,7 @@ void LibraryView::ShowUsersWithExpiredBooks() const{
 	}
 }
 
-void LibraryView::Notify(Message& msg) const
+void LibraryView::Notify(Message msg) const
 {
 	std::cout << msg.text << std::endl;
 }
@@ -284,9 +285,9 @@ void LibraryModel::LentABookToUser(Book& book,User& user)
 }
 
 
-void TakeABookFromUser(Book& book,User& user)
+void LibraryModel::TakeABookFromUser(Book& book,User& user)
 {
-	if(book.getBookOwner()->id != user.getUserId())
+	if(book.getBookOwner()->getUserId() != user.getUserId())
 	{
 		view->Notify(Message(Error,"This book owes to another user!"));
 		return;
@@ -306,6 +307,7 @@ std::vector<User> LibraryModel::getUsersWithExpiredBooks() const
 {
 	size_t current_days = 0;
 	size_t lasted_days = 0;
+	Date   borrowing_date;
 
 	current_days = current_date.year*365 + current_date.month*30 + current_date.day;
 
@@ -314,9 +316,10 @@ std::vector<User> LibraryModel::getUsersWithExpiredBooks() const
 	{
 		for(size_t i = 0;i < iter->borrowed_books.size();i++)
 		{
-			lasted_days = iter->borrowed_books[i].year*356;
-			lasted_days += iter->borrowed_books[i].month*30;
-			lasted_days += iter->borrowed_books[i].day;
+			borrowing_date = iter->borrowed_books[i].getBorrowingDate();
+			lasted_days = borrowing_date.year*356;
+			lasted_days += borrowing_date.month*30;
+			lasted_days += borrowing_date.day;
 
 			if(lasted_days > MaxDaysToExpire){
 				expired_users.push_back(*iter);
