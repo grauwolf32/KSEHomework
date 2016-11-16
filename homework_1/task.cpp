@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <ctime>
 
 class Date;
 class Book;
@@ -16,7 +17,7 @@ const size_t MaxDaysToExpire = 30;
 
 using std::string;
 
-enum NotificationType{Default,Error,Notification};
+enum NotificationType{Default,Error,Notification,Debug};
 
 class Date
 {
@@ -32,7 +33,7 @@ public:
 
 class User{
 public:
-	User(string name_);
+	explicit User(size_t id, string name_);
 	size_t getUserId() const;
 	string getUserName() const;
 
@@ -46,7 +47,7 @@ private:
 
 class Book{
 public:
-	Book(string name);
+	explicit Book(size_t id, string name);
 
 	size_t getBookId() const;
 	string getBookName() const;
@@ -74,6 +75,24 @@ public:
 	NotificationType notification_type;
 };
 
+class UserGenerator{
+public:
+	UserGenerator();
+	User GenerateNewUser(const string& name);
+private:
+
+	static size_t user_id_generator;
+};
+
+class BookGenerator
+{
+public:
+	BookGenerator();
+	Book GenerateNewBook(const string& name);
+private:
+	static size_t book_id_generator;
+};
+
 class LibraryModel{
 public:
 	std::vector<User> getUsers() const;
@@ -91,8 +110,10 @@ public:
 	std::vector<User> getUsersWithExpiredBooks() const;
 
 private:
+
 	std::vector<User> library_users;
 	std::vector<Book> library_books;
+
 	Date current_date;
 	LibraryView* view;
 };
@@ -129,11 +150,12 @@ Date::Date(size_t year_, size_t month_, size_t day_):year(year_),month(month_),d
 Message::Message():notification_type(Default),text(string("")) {}
 Message::Message(NotificationType ntype_,string text_):notification_type(ntype_),text(text_) {}
 
-User::User(string name){} 
+User::User(size_t id_, string name_):id(id_),name(name_){} 
 
 size_t User::getUserId() const { return id; }
 string User::getUserName() const { return name; }
 
+Book::Book(size_t id_, string name_):id(id_),name(name_){}
 size_t Book::getBookId() const { return id; }
 User*  Book::getBookOwner() const { return owner; }
 string Book::getBookName() const { return name; }
@@ -151,6 +173,19 @@ void Book::setBorrowingDate(Date& date)
 }
 
 Date Book::getBorrowingDate() const { return borrowing_date; }
+
+size_t UserGenerator::user_id_generator = 0;
+User UserGenerator::GenerateNewUser(const string& name)
+{
+	user_id_generator += 1;
+	return User(user_id_generator,name);
+}
+size_t BookGenerator::book_id_generator = 0;
+Book BookGenerator::GenerateNewBook(const string& name)
+{
+	book_id_generator += 1;
+	return Book(book_id_generator,name);
+}
 
 void LibraryView::ShowAllUsers() const {
 	std::vector<User> users = controller->getUsers();
