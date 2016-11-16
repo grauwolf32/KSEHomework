@@ -1,0 +1,246 @@
+task.cpp:14:7: error: ‘MaxUserBooks’ does not name a type
+ const MaxUserBooks = 3;
+       ^
+task.cpp:15:7: error: ‘MaxDaysToExpire’ does not name a type
+ const MaxDaysToExpire = 30;
+       ^
+task.cpp:34:2: error: ‘string’ does not name a type
+  string getUserName() const;
+  ^
+task.cpp:38:2: error: ‘string’ does not name a type
+  string name;
+  ^
+task.cpp:46:14: error: expected ‘)’ before ‘name’
+  Book(string name);
+              ^
+task.cpp:47:8: error: expected ‘;’ at end of member declaration
+  ~Book()
+        ^
+task.cpp:51:2: error: ‘string’ does not name a type
+  string getBookName() const;
+  ^
+task.cpp:58:2: error: ‘string’ does not name a type
+  string name;
+  ^
+task.cpp:68:2: error: ‘string’ does not name a type
+  string text;
+  ^
+task.cpp: In member function ‘void LibraryView::ShowAllUsers() const’:
+task.cpp:125:12: error: ‘iter’ does not name a type
+   for(auto iter = users.begin(); iter != users.end(); iter++)
+            ^
+task.cpp:125:34: error: expected ‘;’ before ‘iter’
+   for(auto iter = users.begin(); iter != users.end(); iter++)
+                                  ^
+task.cpp:125:34: error: ‘iter’ was not declared in this scope
+task.cpp: In member function ‘void LibraryView::ShowAllBooks() const’:
+task.cpp:140:12: error: ‘iter’ does not name a type
+   for(auto iter = books.begin(); iter != books.end(); iter++)
+            ^
+task.cpp:140:34: error: expected ‘;’ before ‘iter’
+   for(auto iter = books.begin(); iter != books.end(); iter++)
+                                  ^
+task.cpp:140:34: error: ‘iter’ was not declared in this scope
+task.cpp: In member function ‘void LibraryView::ShowUsersWithExpiredBooks() const’:
+task.cpp:155:12: error: ‘iter’ does not name a type
+   for(auto iter = users.begin();iter != users.end(); iter++)
+            ^
+task.cpp:155:33: error: expected ‘;’ before ‘iter’
+   for(auto iter = users.begin();iter != users.end(); iter++)
+                                 ^
+task.cpp:155:33: error: ‘iter’ was not declared in this scope
+task.cpp: In member function ‘void LibraryView::Notify(Message&) const’:
+task.cpp:167:19: error: ‘class Message’ has no member named ‘text’
+  std::cout << msg.text << std::endl;
+                   ^
+task.cpp: In member function ‘void LibraryModel::addUser(User&)’:
+task.cpp:175:11: error: ‘iter’ does not name a type
+  for(auto iter=library_users.begin();iter != library_users.end(); iter++)
+           ^
+task.cpp:175:38: error: expected ‘;’ before ‘iter’
+  for(auto iter=library_users.begin();iter != library_users.end(); iter++)
+                                      ^
+task.cpp:175:38: error: ‘iter’ was not declared in this scope
+task.cpp:178:53: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]
+    view->Notify(Message(Error,"User already exists!")); 
+                                                     ^
+task.cpp:178:54: error: invalid initialization of non-const reference of type ‘Message&’ from an rvalue of type ‘Message’
+    view->Notify(Message(Error,"User already exists!")); 
+                                                      ^
+task.cpp:165:6: note:   initializing argument 1 of ‘void LibraryView::Notify(Message&) const’
+ void LibraryView::Notify(Message& msg) const
+      ^
+task.cpp: In member function ‘void LibraryModel::delUser(User&)’:
+task.cpp:187:11: error: ‘iter’ does not name a type
+  for(auto iter=library_users.begin();iter != library_users.end();iter++)
+           ^
+task.cpp:187:38: error: expected ‘;’ before ‘iter’
+  for(auto iter=library_users.begin();iter != library_users.end();iter++)
+                                      ^
+task.cpp:187:38: error: ‘iter’ was not declared in this scope
+task.cpp:196:52: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]
+  view->Notify(Message(Error,"User does not exists!"));
+                                                    ^
+task.cpp:196:53: error: invalid initialization of non-const reference of type ‘Message&’ from an rvalue of type ‘Message’
+  view->Notify(Message(Error,"User does not exists!"));
+                                                     ^
+task.cpp:165:6: note:   initializing argument 1 of ‘void LibraryView::Notify(Message&) const’
+ void LibraryView::Notify(Message& msg) const
+      ^
+task.cpp: In member function ‘void LibraryModel::addBook(Book&)’:
+task.cpp:201:11: error: ‘iter’ does not name a type
+  for(auto iter=library_books.begin();iter != library_books.end(); iter++)
+           ^
+task.cpp:201:38: error: expected ‘;’ before ‘iter’
+  for(auto iter=library_books.begin();iter != library_books.end(); iter++)
+                                      ^
+task.cpp:201:38: error: ‘iter’ was not declared in this scope
+task.cpp:205:53: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]
+    view->Notify(Message(Error,"Book already exists!"));
+                                                     ^
+task.cpp:205:54: error: invalid initialization of non-const reference of type ‘Message&’ from an rvalue of type ‘Message’
+    view->Notify(Message(Error,"Book already exists!"));
+                                                      ^
+task.cpp:165:6: note:   initializing argument 1 of ‘void LibraryView::Notify(Message&) const’
+ void LibraryView::Notify(Message& msg) const
+      ^
+task.cpp: In member function ‘void LibraryModel::delBook(Book&)’:
+task.cpp:214:11: error: ‘iter’ does not name a type
+  for(auto iter=library_books.begin();iter != library_books.end();iter++)
+           ^
+task.cpp:214:38: error: expected ‘;’ before ‘iter’
+  for(auto iter=library_books.begin();iter != library_books.end();iter++)
+                                      ^
+task.cpp:214:38: error: ‘iter’ was not declared in this scope
+task.cpp:223:52: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]
+  view->Notify(Message(Error,"Book does not exists!"));
+                                                    ^
+task.cpp:223:53: error: invalid initialization of non-const reference of type ‘Message&’ from an rvalue of type ‘Message’
+  view->Notify(Message(Error,"Book does not exists!"));
+                                                     ^
+task.cpp:165:6: note:   initializing argument 1 of ‘void LibraryView::Notify(Message&) const’
+ void LibraryView::Notify(Message& msg) const
+      ^
+task.cpp: In member function ‘void LibraryModel::LentABookToUser(Book&, User&)’:
+task.cpp:59:8: error: ‘User* Book::owner’ is private
+  User* owner;
+        ^
+task.cpp:228:10: error: within this context
+  if(book.owner != (User*)NULL){
+          ^
+task.cpp:229:75: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]
+   view->Notify(Message(Notification,"This book is aleady owed by someone!"));
+                                                                           ^
+task.cpp:229:76: error: invalid initialization of non-const reference of type ‘Message&’ from an rvalue of type ‘Message’
+   view->Notify(Message(Notification,"This book is aleady owed by someone!"));
+                                                                            ^
+task.cpp:165:6: note:   initializing argument 1 of ‘void LibraryView::Notify(Message&) const’
+ void LibraryView::Notify(Message& msg) const
+      ^
+task.cpp:39:20: error: ‘std::vector<Book> User::borrowed_books’ is private
+  std::vector<Book> borrowed_books; 
+                    ^
+task.cpp:233:10: error: within this context
+  if(user.borrowed_books.size() > MaxUserBooks)
+          ^
+task.cpp:233:34: error: ‘MaxUserBooks’ was not declared in this scope
+  if(user.borrowed_books.size() > MaxUserBooks)
+                                  ^
+task.cpp:235:64: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]
+   view->Notify(Message(Notification,"User owes too much books!"));
+                                                                ^
+task.cpp:235:65: error: invalid initialization of non-const reference of type ‘Message&’ from an rvalue of type ‘Message’
+   view->Notify(Message(Notification,"User owes too much books!"));
+                                                                 ^
+task.cpp:165:6: note:   initializing argument 1 of ‘void LibraryView::Notify(Message&) const’
+ void LibraryView::Notify(Message& msg) const
+      ^
+task.cpp:239:11: error: ‘iter’ does not name a type
+  for(auto iter = user.borrowed_books.begin();iter != user.borrowed_books.end();iter++)
+           ^
+task.cpp:239:46: error: expected ‘;’ before ‘iter’
+  for(auto iter = user.borrowed_books.begin();iter != user.borrowed_books.end();iter++)
+                                              ^
+task.cpp:239:46: error: ‘iter’ was not declared in this scope
+task.cpp:39:20: error: ‘std::vector<Book> User::borrowed_books’ is private
+  std::vector<Book> borrowed_books; 
+                    ^
+task.cpp:239:59: error: within this context
+  for(auto iter = user.borrowed_books.begin();iter != user.borrowed_books.end();iter++)
+                                                           ^
+task.cpp:243:66: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]
+    view->Notify(Message(Error,"User user already owes this book!"));
+                                                                  ^
+task.cpp:243:67: error: invalid initialization of non-const reference of type ‘Message&’ from an rvalue of type ‘Message’
+    view->Notify(Message(Error,"User user already owes this book!"));
+                                                                   ^
+task.cpp:165:6: note:   initializing argument 1 of ‘void LibraryView::Notify(Message&) const’
+ void LibraryView::Notify(Message& msg) const
+      ^
+task.cpp:39:20: error: ‘std::vector<Book> User::borrowed_books’ is private
+  std::vector<Book> borrowed_books; 
+                    ^
+task.cpp:248:7: error: within this context
+  user.borrowed_books.push_back(book);
+       ^
+task.cpp:59:8: error: ‘User* Book::owner’ is private
+  User* owner;
+        ^
+task.cpp:249:7: error: within this context
+  book.owner = &user;
+       ^
+task.cpp: In function ‘void TakeABookFromUser(Book&, User&)’:
+task.cpp:59:8: error: ‘User* Book::owner’ is private
+  User* owner;
+        ^
+task.cpp:256:10: error: within this context
+  if(book.owner->id != user.getUserId())
+          ^
+task.cpp:37:9: error: ‘size_t User::id’ is private
+  size_t id;
+         ^
+task.cpp:256:17: error: within this context
+  if(book.owner->id != user.getUserId())
+                 ^
+task.cpp:258:3: error: ‘view’ was not declared in this scope
+   view->Notify(Message(Error,"This book owes to another user!"));
+   ^
+task.cpp:258:63: warning: deprecated conversion from string constant to ‘char*’ [-Wwrite-strings]
+   view->Notify(Message(Error,"This book owes to another user!"));
+                                                               ^
+task.cpp:262:11: error: ‘iter’ does not name a type
+  for(auto iter = user.borrowed_books.begin();iter != user.borrowed_books.end();iter++)
+           ^
+task.cpp:262:46: error: expected ‘;’ before ‘iter’
+  for(auto iter = user.borrowed_books.begin();iter != user.borrowed_books.end();iter++)
+                                              ^
+task.cpp:262:46: error: ‘iter’ was not declared in this scope
+task.cpp:39:20: error: ‘std::vector<Book> User::borrowed_books’ is private
+  std::vector<Book> borrowed_books; 
+                    ^
+task.cpp:262:59: error: within this context
+  for(auto iter = user.borrowed_books.begin();iter != user.borrowed_books.end();iter++)
+                                                           ^
+task.cpp:39:20: error: ‘std::vector<Book> User::borrowed_books’ is private
+  std::vector<Book> borrowed_books; 
+                    ^
+task.cpp:265:9: error: within this context
+    user.borrowed_books.erase(*iter);
+         ^
+task.cpp:59:8: error: ‘User* Book::owner’ is private
+  User* owner;
+        ^
+task.cpp:269:7: error: within this context
+  book.owner = (User*) NULL;
+       ^
+task.cpp: In member function ‘std::vector<User> LibraryModel::getUsersWithExpiredBooks() const’:
+task.cpp:280:11: error: ‘iter’ does not name a type
+  for(auto iter = library_users.begin();iter != library_users.end();iter++)
+           ^
+task.cpp:280:40: error: expected ‘;’ before ‘iter’
+  for(auto iter = library_users.begin();iter != library_users.end();iter++)
+                                        ^
+task.cpp:280:40: error: ‘iter’ was not declared in this scope
+task.cpp:288:21: error: ‘MaxDaysToExpire’ was not declared in this scope
+    if(lasted_days > MaxDaysToExpire){
+                     ^

@@ -11,8 +11,10 @@ class LibraryModel;
 class LibraryView;
 class LibraryController;
 
-const MaxUserBooks = 3;
-const MaxDaysToExpire = 30;
+const size_t MaxUserBooks = 3;
+const size_t MaxDaysToExpire = 30;
+
+using std::string;
 
 enum NotificationType{Default,Error,Notification};
 
@@ -30,6 +32,7 @@ public:
 
 class User{
 public:
+	User(string name_);
 	size_t getUserId() const;
 	string getUserName() const;
 
@@ -42,16 +45,14 @@ private:
 
 class Book{
 public:
-	Book();
 	Book(string name);
-	~Book()
 
 	size_t getBookId() const;
 	User*  getBookOwner() const;
 	string getBookName() const;
 
 	void setBorrowingDate(Date& date);
-	Date& getBorrowingDate() const;
+	Date getBorrowingDate() const;
 
 private:
 	size_t id;
@@ -64,6 +65,7 @@ private:
 
 class Message{
 public:
+	Message();
 	Message(NotificationType ntype_,char* text_);
 	string text;
 	NotificationType notification_type;
@@ -118,8 +120,31 @@ private:
 	LibraryModel* model;
 };
 
+Date::Date():year(0),month(0),day(0){}
+Date::Date(size_t year_, size_t month_, size_t day_):year(year_),month(month_),day(day_){} //#TODO Assert month <= 12 day <= 31
+
+Message::Message():notification_type(Default),text(string("")) {}
+Message(NotificationType ntype_,char* text_):notification_type(ntype_),text(string(text_)) {}
+
+User::User(string name){} //
+size_t User::getUserId() const { return name; }
+string User::getUserName() const { return id; }
+
+size_t Book::getBookId() const { return id; }
+User*  Book::getBookOwner() const { return owner; }
+string getBookName() const { return name; }
+
+void Book::setBorrowingDate(Date& date)
+{
+	borrowing_date.year = date.year;
+	borrowing_date.month = date.month;
+	borrowing_date.day = data.day;
+}
+
+Date Book::getBorrowingDate() const { return borrowing_date; }
+
 void LibraryView::ShowAllUsers() const {
-	std::vector<User>& users = controller->getUsers();
+	std::vector<User> users = controller->getUsers();
 	if(!users.empty()){
 		std::cout << "Users:" << std::endl;
 		for(auto iter = users.begin(); iter != users.end(); iter++)
@@ -134,7 +159,7 @@ void LibraryView::ShowAllUsers() const {
 }
 
 void LibraryView::ShowAllBooks() const {
-	std::vector<Book>& books = controller->getBooks();
+	std::vector<Book> books = controller->getBooks();
 	if(!books.empty()){
 		std::cout << "Books:" << std::endl;
 		for(auto iter = books.begin(); iter != books.end(); iter++)
@@ -149,7 +174,7 @@ void LibraryView::ShowAllBooks() const {
 }
 
 void LibraryView::ShowUsersWithExpiredBooks() const{
-	std::vector<User>& users = controller->getUsersWithExpiredBooks();
+	std::vector<User> users = controller->getUsersWithExpiredBooks();
 	if(!users.empty()){
 		std::cout << "Users who expired his/her book(s): " << std::endl;
 		for(auto iter = users.begin();iter != users.end(); iter++)
